@@ -57,13 +57,16 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public ServerEntity update(Server server) {
-        return null;
+    public ServerEntity update(ServerEntity serverEntity) {
+        log.info("Updating the server: {}", serverEntity.getName()); //loging the name of the server in the console
+        return serverRepository.save(serverEntity);
     }
 
     @Override
     public Boolean delete(Long id) {
-        return null;
+        log.info("Deleting server by id : {}", id);
+        serverRepository.deleteById(id);
+        return Boolean.TRUE;
     }
 
     private String setServerImageUrl() {

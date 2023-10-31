@@ -12,7 +12,7 @@ public interface ServerService {
     ServerEntity ping(String ipAddress) throws IOException;
     Collection<ServerEntity> list(int limit);
     ServerEntity get(Long id);
-    ServerEntity update(Server server);
+    ServerEntity update(ServerEntity serverEntity);
     Boolean delete(Long id);
 
 }
