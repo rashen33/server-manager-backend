@@ -52,7 +52,8 @@ public class ServerServiceImpl implements ServerService{
 
     @Override
     public ServerEntity get(Long id) {
-        return null;
+        log.info("Fetching server by id: {}", id);
+        return serverRepository.findById(id).get(); //returning the serverEntity object which has the given id
     }
 
     @Override
