@@ -11,16 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
+import java.util.Random;
 
 import static edu.icet.enumeration.Status.SERVER_DOWN;
 import static edu.icet.enumeration.Status.SERVER_UP;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor //same as autowired (dependancy injection)
 @Service
 @Transactional
 @Slf4j //creates a static SLF4J logger instance named log
@@ -70,6 +72,8 @@ public class ServerServiceImpl implements ServerService{
     }
 
     private String setServerImageUrl() {
-        return null;
+        String[] imageNames = { "server1.png", "server2.png", "server3.png", "server4.png"};
+        //getting an image name randomly and returning the path of it
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/server/image/" + imageNames[new Random().nextInt(4)]).toUriString();
     }
 }
