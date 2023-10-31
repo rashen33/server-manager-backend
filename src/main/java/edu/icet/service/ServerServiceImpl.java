@@ -2,14 +2,23 @@ package edu.icet.service;
 
 import edu.icet.dao.ServerEntity;
 import edu.icet.dto.Server;
+import edu.icet.enumeration.Status;
 import edu.icet.repository.ServerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
+
+import static edu.icet.enumeration.Status.SERVER_DOWN;
+import static edu.icet.enumeration.Status.SERVER_UP;
 
 @RequiredArgsConstructor
 @Service
@@ -26,13 +35,19 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public ServerEntity ping(String ipAddress) {
-        return null;
+    public ServerEntity ping(String ipAddress) throws IOException {
+        log.info("Saving new server: {}", ipAddress);
+        ServerEntity serverEntity = serverRepository.findByIpAddress(ipAddress);
+        InetAddress address = InetAddress.getByName(ipAddress);
+        serverEntity.setStatus(address.isReachable(10000) ? SERVER_UP : SERVER_DOWN);
+        serverRepository.save(serverEntity);
+        return serverEntity;
     }
 
     @Override
     public Collection<ServerEntity> list(int limit) {
-        return null;
+        log.info("Fetching all servers");
+        return serverRepository.findAll(PageRequest.of(0, limit)).toList(); //getting the first page and setting the limit given by
     }
 
     @Override
