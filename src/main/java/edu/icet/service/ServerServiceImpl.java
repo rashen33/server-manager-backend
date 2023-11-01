@@ -1,21 +1,16 @@
 package edu.icet.service;
 
-import edu.icet.dao.ServerEntity;
-import edu.icet.dto.Server;
-import edu.icet.enumeration.Status;
+import edu.icet.model.Server;
 import edu.icet.repository.ServerRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Random;
 
@@ -30,16 +25,16 @@ public class ServerServiceImpl implements ServerService{
 //    @Autowired
     private final ServerRepository serverRepository;
     @Override
-    public ServerEntity create(ServerEntity serverEntity) {
+    public Server create(Server serverEntity) {
         log.info("Saving new server: {}", serverEntity.getName()); //loging the name of the server in the console
         serverEntity.setImageUrl(setServerImageUrl()); //setting an image for the server
         return serverRepository.save(serverEntity); //saving the server
     }
 
     @Override
-    public ServerEntity ping(String ipAddress) throws IOException {
+    public Server ping(String ipAddress) throws IOException {
         log.info("Saving new server: {}", ipAddress);
-        ServerEntity serverEntity = serverRepository.findByIpAddress(ipAddress);
+        Server serverEntity = serverRepository.findByIpAddress(ipAddress);
         InetAddress address = InetAddress.getByName(ipAddress);
         serverEntity.setStatus(address.isReachable(10000) ? SERVER_UP : SERVER_DOWN);
         serverRepository.save(serverEntity);
@@ -47,19 +42,19 @@ public class ServerServiceImpl implements ServerService{
     }
 
     @Override
-    public Collection<ServerEntity> list(int limit) {
+    public Collection<Server> list(int limit) {
         log.info("Fetching all servers");
         return serverRepository.findAll(PageRequest.of(0, limit)).toList(); //getting the first page and setting the limit given by
     }
 
     @Override
-    public ServerEntity get(Long id) {
+    public Server get(Long id) {
         log.info("Fetching server by id: {}", id);
         return serverRepository.findById(id).get(); //returning the serverEntity object which has the given id
     }
 
     @Override
-    public ServerEntity update(ServerEntity serverEntity) {
+    public Server update(Server serverEntity) {
         log.info("Updating the server: {}", serverEntity.getName()); //loging the name of the server in the console
         return serverRepository.save(serverEntity);
     }

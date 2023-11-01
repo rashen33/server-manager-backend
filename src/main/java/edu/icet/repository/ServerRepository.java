@@ -1,8 +1,8 @@
 package edu.icet.repository;
 
-import edu.icet.dao.ServerEntity;
+import edu.icet.model.Server;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ServerRepository extends JpaRepository<ServerEntity,Long> {
-    ServerEntity findByIpAddress(String ipAdress);
+public interface ServerRepository extends JpaRepository<Server,Long> {
+    Server findByIpAddress(String ipAdress);
 }
