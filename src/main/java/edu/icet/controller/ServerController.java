@@ -45,7 +45,7 @@ public class ServerController {
         return ResponseEntity.ok(
                 Response.builder()
                         .timeStamp(LocalDateTime.now())
-                        .data(Map.of("server",serverService.list(30)))
+                        .data(Map.of("server",server))
                         .message(server.getStatus() == Status.SERVER_UP ? "Ping Success" : "Ping Failed")
                         .status(HttpStatus.valueOf(OK))
                         .statusCode(OK)
@@ -62,6 +62,19 @@ public class ServerController {
                         .message("Server Created")
                         .status(CREATED)
                         .statusCode(CREATED.value())
+                        .build()
+        );
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Response> getServer(@PathVariable Long id){
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(Map.of("server",serverService.get(id)))
+                        .message("Server Retrived")
+                        .status(HttpStatus.valueOf(OK))
+                        .statusCode(OK)
                         .build()
         );
     }
