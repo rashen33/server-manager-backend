@@ -14,11 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import static javax.security.auth.callback.ConfirmationCallback.OK;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.util.MimeTypeUtils.IMAGE_PNG_VALUE;
 
 @RestController
 @RequestMapping("/server")
@@ -77,5 +80,23 @@ public class ServerController {
                         .statusCode(OK)
                         .build()
         );
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Response> deleteServer(@PathVariable Long id){
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(Map.of("server",serverService.delete(id)))
+                        .message("Server Deleted")
+                        .status(HttpStatus.valueOf(OK))
+                        .statusCode(OK)
+                        .build()
+        );
+    }
+
+    @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
+    public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException {
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Downloads/images/" + fileName))
     }
 }
