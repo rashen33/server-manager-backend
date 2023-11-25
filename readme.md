@@ -6,7 +6,7 @@ explain what are the dependancies used.
 
 explaing about the architecture. 
 
-draw the er. 
+
 
 
 
